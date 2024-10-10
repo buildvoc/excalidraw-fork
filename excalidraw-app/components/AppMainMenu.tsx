@@ -2,12 +2,15 @@ import React from "react";
 import { PlusPromoIcon } from "../../src/components/icons";
 import { MainMenu } from "../../src/packages/excalidraw/index";
 import { LanguageList } from "./LanguageList";
+import { useAuth } from "../pages/AuthContext";
+import { loginIcon } from "../../src/components/icons";
 
 export const AppMainMenu: React.FC<{
   setCollabDialogShown: (toggle: boolean) => any;
   isCollaborating: boolean;
   isCollabEnabled: boolean;
 }> = React.memo((props) => {
+  const { isAuthenticated, logout } = useAuth();
   return (
     <MainMenu>
       <MainMenu.DefaultItems.LoadScene />
@@ -24,7 +27,7 @@ export const AppMainMenu: React.FC<{
       <MainMenu.DefaultItems.Help />
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />
-      <MainMenu.ItemLink
+      {/* <MainMenu.ItemLink
         icon={PlusPromoIcon}
         href={`${
           import.meta.env.VITE_APP_PLUS_LP
@@ -33,7 +36,16 @@ export const AppMainMenu: React.FC<{
       >
         Excalidraw+
       </MainMenu.ItemLink>
-      <MainMenu.DefaultItems.Socials />
+      <MainMenu.DefaultItems.Socials /> */}
+      {isAuthenticated && (
+        <MainMenu.Item
+          onSelect={() => {}}
+          icon={loginIcon} // You can use a different icon if preferred
+          onClick={logout} // Call logout function on click
+        >
+          Logout
+        </MainMenu.Item>
+      )}
       <MainMenu.Separator />
       <MainMenu.DefaultItems.ToggleTheme />
       <MainMenu.ItemCustom>
