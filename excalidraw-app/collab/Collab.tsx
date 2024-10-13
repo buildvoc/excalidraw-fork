@@ -111,7 +111,7 @@ class Collab extends PureComponent<Props, CollabState> {
     super(props);
     this.state = {
       errorMessage: "",
-      username: importUsernameFromLocalStorage() || "",
+      username: localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data") as string)?.name : importUsernameFromLocalStorage() || "",
       activeRoomLink: "",
     };
     this.portal = new Portal(this);

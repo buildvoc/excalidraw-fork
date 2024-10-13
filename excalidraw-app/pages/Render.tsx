@@ -103,6 +103,11 @@ import { OverwriteConfirmDialog } from "../../src/components/OverwriteConfirm/Ov
 import Trans from "../../src/components/Trans";
 
 import { storageBackend, getStorageBackend } from "../data/config";
+import { DashboardSave, dashboardSaveDialogShownAtom } from "../dashboard-save/DashboardSave";
+import { Project, projectDialogShownAtom } from "../projects/Project";
+
+import "react-toastify/dist/ReactToastify.css"; 
+import { ToastContainer } from "react-toastify";
 
 polyfill();
 
@@ -309,6 +314,9 @@ const ExcalidrawWrapper = () => {
   const [isCollaborating] = useAtomWithInitialValue(isCollaboratingAtom, () => {
     return isCollaborationLink(window.location.href);
   });
+
+  const [dashboardSaveDialogShown, setDashboardSaveDialogShown] = useAtom(dashboardSaveDialogShownAtom);
+  const [projectDialogShown, setProjectDialogShown] = useAtom(projectDialogShownAtom);
 
   useHandleLibrary({
     excalidrawAPI,
@@ -750,6 +758,8 @@ const ExcalidrawWrapper = () => {
       >
         <AppMainMenu
           setCollabDialogShown={setCollabDialogShown}
+          setProjectDialogShown={setProjectDialogShown}
+          setDashboardSaveDialogShown={setDashboardSaveDialogShown}
           isCollaborating={isCollaborating}
           isCollabEnabled={!isCollabDisabled}
         />
@@ -792,6 +802,10 @@ const ExcalidrawWrapper = () => {
         {excalidrawAPI && !isCollabDisabled && (
           <Collab excalidrawAPI={excalidrawAPI} />
         )}
+
+        {projectDialogShown && <Project /> }
+        {dashboardSaveDialogShown && <DashboardSave /> }
+
         {errorMessage && (
           <ErrorDialog onClose={() => setErrorMessage("")}>
             {errorMessage}
@@ -806,6 +820,17 @@ const ExcalidrawApp = () => {
   return (
     <TopErrorBoundary>
       <Provider unstable_createStore={() => appJotaiStore}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <ExcalidrawWrapper />
       </Provider>
     </TopErrorBoundary>
